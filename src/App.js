@@ -1,57 +1,37 @@
-import React from 'react';
-import { useEffect, useState } from 'react';
+import React, {Component} from 'react';
+import logo from './logo.svg';
 import './App.css';
 
-function App() {
-  const [date, setDate] = useState(null);
-  useEffect(() => {
-    async function getDate() {
-      const res = await fetch('/api/date');
-      const newDate = await res.text();
-      setDate(newDate);
+
+import { render } from '@testing-library/react';
+
+class App extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+          pageTitle: ''
+        };
+      }
+
+    handleInput = (event) => {
+        let date = new Date();
+
+        let newDate = new Date(date.setTime(date.getTime() + event.target.value * 86400000 ));
+         this.setState({    
+            pageTitle: newDate.toLocaleDateString()
+        })
     }
-    getDate();
-  }, []);
-  return (
-    <main>
-      <h1>Create React App + Go API</h1>
-      <h2>
-        Deployed with{' '}
-        <a
-          href="https://zeit.co/docs"
-          target="_blank"
-          rel="noreferrer noopener"
-        >
-          ZEIT Now
-        </a>
-        !
-      </h2>
-      <p>
-        <a
-          href="https://github.com/zeit/now-examples/tree/master/create-react-app-functions"
-          target="_blank"
-          rel="noreferrer noopener"
-        >
-          This project
-        </a>{' '}
-        was bootstrapped with{' '}
-        <a href="https://facebook.github.io/create-react-app/">
-          Create React App
-        </a>{' '}
-        and contains three directories, <code>/public</code> for static assets,{' '}
-        <code>/src</code> for components and content, and <code>/api</code>{' '}
-        which contains a serverless <a href="https://golang.org/">Go</a>{' '}
-        function. See{' '}
-        <a href="/api/date">
-          <code>api/date</code> for the Date API with Go
-        </a>
-        .
-      </p>
-      <br />
-      <h2>The date according to Go is:</h2>
-      <p>{date ? date : 'Loading date...'}</p>
-    </main>
-  );
+
+    render() {
+        return (
+            <div className="text-center mb-4">          
+                <div className="top-name center-block text-center">
+                    <input type='number' autofocus="" required='' className='form-control' onChange={this.handleInput}/>
+                </div>                      
+                <h1 className="h3 mb-3 font-weight-normal">Дата просрочки - {this.state.pageTitle}</h1>
+            </div>
+        )
+    }
 }
 
 export default App;
